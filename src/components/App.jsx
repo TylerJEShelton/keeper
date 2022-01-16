@@ -14,11 +14,20 @@ export default function App() {
       return [
         ...prev,
         {
-          key: prev.length + 1,
+          key: prev[prev.length - 1].key + 1,
           title: newTitle,
           content: newContent,
         },
       ];
+    });
+  }
+
+  function deleteNote(event, id) {
+    event.preventDefault();
+    setNotes(prev => {
+      return prev.filter(note => {
+        return note.key !== id;
+      });
     });
   }
 
@@ -27,7 +36,13 @@ export default function App() {
       <Header />
       <CreateArea addNewNote={addNote} />
       {notes.map(note => (
-        <Note key={note.key} title={note.title} content={note.content} />
+        <Note
+          key={note.key}
+          id={note.key}
+          title={note.title}
+          content={note.content}
+          deleteNote={deleteNote}
+        />
       ))}
       <Footer />
     </div>

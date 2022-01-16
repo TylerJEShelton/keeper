@@ -3,16 +3,28 @@ import React, { useState } from 'react';
 export default function CreateArea(props) {
   const { addNewNote } = props;
 
-  const [inputTitle, setInputTitle] = useState('');
-  const [inputContent, setInputContent] = useState('');
+  const [inputNote, setInputNote] = useState({
+    title: '',
+    content: '',
+  });
 
   function handleChange(event) {
     const inputType = event.target.name;
     const enteredText = event.target.value;
     if (inputType === 'title') {
-      setInputTitle(enteredText);
+      setInputNote(prev => {
+        return {
+          title: enteredText,
+          content: prev.content,
+        };
+      });
     } else if (inputType === 'content') {
-      setInputContent(enteredText);
+      setInputNote(prev => {
+        return {
+          title: prev.title,
+          content: enteredText,
+        };
+      });
     }
   }
 
@@ -23,20 +35,19 @@ export default function CreateArea(props) {
           onChange={handleChange}
           name='title'
           placeholder='Title'
-          value={inputTitle}
+          value={inputNote.title}
         />
         <textarea
           onChange={handleChange}
           name='content'
           placeholder='Take a note...'
           rows='3'
-          value={inputContent}
+          value={inputNote.content}
         />
         <button
           onClick={e => {
-            addNewNote(e, inputTitle, inputContent);
-            setInputTitle('');
-            setInputContent('');
+            addNewNote(e, inputNote.title, inputNote.content);
+            setInputNote({ title: '', content: '' });
           }}
         >
           Add
